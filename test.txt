@@ -1,8 +1,0 @@
-Git is a distributed version control system.
-Git is free software.
-i am learning git
-update your work
-hello haha
-Git tracks changes.
-
-test git update
