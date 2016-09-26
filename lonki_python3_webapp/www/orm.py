@@ -30,7 +30,7 @@ async def create_pool(loop,**kw):
 async def select(sql,args,size=None):
     log(sql,args)
     global __pool
-    with (await __pool.get()) as conn:
+    async with __pool.get() as conn:
         async with conn.cursor(aiomysql.DictCursor) as cur:
             await cur.execute(sql.replace('?','%s'),args or ())
             if size:
@@ -170,7 +170,7 @@ class Model(dict,metaclass=ModelMetaclass):
         if value is None:
             field = self.__mappings__[key]
             if field.default is not None:
-                value = field.default() if callable(field.default()) else field.default
+                value = field.default() if callable(field.default) else field.default
                 logging.debug('using default value for %s: %s' %(key,str(value)))
                 setattr(self,key,value)
         return value
