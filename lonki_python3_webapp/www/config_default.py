@@ -13,6 +13,6 @@ configs = {
         'db':'project'
     },
     'session':{
-        'secret','lonki'
+        'secret':'lonki'
     }
 }

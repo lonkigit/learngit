@@ -4,6 +4,12 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="awesome-python3-webapp" />
+    <orderEntry type="module" module-name="awesome-python3-webapp" />
+    <orderEntry type="module" module-name="awesome-python-webapp" />
+    <orderEntry type="module" module-name="awesome-python-webapp" />
+    <orderEntry type="module" module-name="awesome-python-webapp" />
+    <orderEntry type="module" module-name="awesome-python-webapp-day-08" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
