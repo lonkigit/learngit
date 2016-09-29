@@ -24,7 +24,7 @@
             methods : {
                 submit : function (event) {
                     event.preventDefault();
-                    var $form = $('vm')
+                    var $form = $('#vm')
                     if(! this.name.trim()){
                         return $form.showFormError('请输入名字');
                     }
@@ -37,12 +37,11 @@
                     if(this.password1 !== this.password2){
                         return $form.showFormError('两次输入的口令不一致');
                     }
-                    var email = this.email.trim().toLowercase();
+                    var email = this.email.trim().toLowerCase();
                     $form.postJSON('/api/users',{
-
                         name : this.name.trim(),
                         email : email,
-                        passwd: CryptoJS.SHA1(email + ":" + this.passwd1).toString()
+                        passwd: CryptoJS.SHA1(email + ":" + this.password1).toString()
 
                      },function (err,r) {
                         if(err){
@@ -51,7 +50,6 @@
                         return location.assign('/')
                     });
                 }
-
             }
         });
         $('#vm').show();
@@ -63,7 +61,7 @@
 {%block content%}
     <div class="uk-width-2-3">
         <h1>欢迎注册！</h1>
-        <form id="vm",v-on="submit: submit" class="uk-form uk-form-stacked">
+        <form id="vm" @submit="submit" class="uk-form uk-form-stacked">
             <div class="uk-alert uk-alert-danger uk-hidden"></div>
             <div class="uk-form-row">
                 <label class="uk-form-label">名字：</label>
