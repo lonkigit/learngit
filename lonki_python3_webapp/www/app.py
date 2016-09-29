@@ -55,8 +55,10 @@ async def auth_factory(app,handler):
         if cookie_str:
             user = await cookie2user(cookie_str)
             if user:
-                logging.info('set current user: %s' %user.email)
+                logging.info('set current user: %s' % user.email)
                 request.__user__ = user
+        if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
+            return web.HTTPFound('/signin')
         return (await handler(request))
     return auth
 
@@ -96,9 +98,11 @@ async def response_factory(app, handler):
                 resp.content_type = 'application/json;charset=utf-8'
                 return resp
             else:
+                r['__user__'] = request.__user__
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
                 return resp
+
         if isinstance(r, int) and r >= 100 and r < 600:
             return web.Response(r)
         if isinstance(r, tuple) and len(r) == 2:
@@ -127,7 +131,7 @@ def datetime_filter(t):
 async def init(loop):
     await orm.create_pool(loop=loop, host='localhost', port=3306, user='root', password='zhujie8721*', db='project')
     app = web.Application(loop=loop, middlewares=[
-        logger_factory, response_factory
+        logger_factory, auth_factory, response_factory
     ])
     init_jinja2(app, filters=dict(datetime=datetime_filter))
     add_routes(app, 'handlers')
