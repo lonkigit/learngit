@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="../static/css/awesome.css">
 
     <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/sha1.min.js"></script>
     <script src="../static/js/md5.js"></script>
     <script src="../static/js/uikit.min.js"></script>
+    <script src="../static/js/sticky.min.js"></script>
+    <script src="../static/js/vue.min.js"></script>
     <script src="../static/js/awesome.js"></script>
+
     {% block beforehead %}<!--before head -->{% endblock%}
 </head>
 <body>
@@ -19,15 +23,15 @@
         <div class="uk-container uk-container-center">
              <a href="/" class="uk-navbar-brand">Lonki</a>
              <ul class="uk-navbar-nav">
-                <li data-url="blogs"><a href="/"><i class="uk-icon-home"></i> 日志</a></li>
-                <li><a target="_blank" href="#"><i class="uk-icon-book"></i> 教程</a></li>
-                <li><a target="_blank" href="#"><i class="uk-icon-code"></i> 源码</a></li>
+                 <li data-url="blogs"><a href="/"><i class="uk-icon-home"></i> 日志</a></li>
+                <li><a target="_blank" href="http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000"><i class="uk-icon-book"></i> 教程</a></li>
+                <li><a target="_blank" href="https://github.com/lonkigit/learngit/tree/master/lonki_python3_webapp"><i class="uk-icon-code"></i> 源码</a></li>
              </ul>
              <div class="uk-navbar-flip">
                 <ul class="uk-navbar-nav">
-                {% if user %}
+                {% if __user__ %}
                     <li class="uk-parent" data-uk-dropdown>
-                        <a href="#0"><i class="uk-icon-user"></i> {{ user.name }}</a>
+                        <a href="#0"><i class="uk-icon-user"></i> {{ __user__.name }}</a>
                         <div class="uk-dropdown uk-dropdown-navbar">
                             <ul class="uk-nav uk-nav-navbar">
                                 <li><a href="/signout"><i class="uk-icon-sign-out"></i> 登出</a></li>
@@ -59,7 +63,7 @@
                     <a target="_blank" href="#" class="uk-icon-button uk-icon-linkedin-square"></a>
                     <a target="_blank" href="#" class="uk-icon-button uk-icon-twitter"></a>
                 </p>
-                <p>Powered by <a href="#">Lonki Python Webapp</a>. Copyright &copy; 2014. [<a href="/manage/" target="_blank">Manage</a>]</p>
+                <p>Powered by <a href="#">Lonki Python Webapp</a>. Copyright &copy; 2016. [<a href="/manage/" target="_blank">Manage</a>]</p>
                 <a target="_blank" href="#"><i class="uk-icon-html5" style="font-size:64px; color: #444;"></i></a>
             </div>
         </div>
