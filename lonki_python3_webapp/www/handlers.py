@@ -99,6 +99,8 @@ def index(request):
 @get('/blog/{id}')
 async def get_blog(id):
     blog = await Blog.find(id)
+    if blog is None:
+        raise APIResourceNotFoundError('Blog')
     comments = await Comment.findAll('blog_id=?',[id],orderBy='created_at desc')
     for c in comments:
         c.html_content = text2html(c.content)
@@ -158,7 +160,7 @@ def manage_comments(*,page='1'):
 @get('/manage/blogs')
 def manage_blogs(*,page='1'):
     return {
-        '__template__' : 'manage_comments.html',
+        '__template__' : 'manage_blogs.html',
         'page_index' : get_page_index(page)
     }
 

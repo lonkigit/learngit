@@ -76,7 +76,7 @@ $(function() {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="comment in comments" >
+                <tr v-repeat="comment: comments" >
                     <td>
                         <span v-text="comment.user_name"></span>
                     </td>
@@ -87,11 +87,11 @@ $(function() {
                         <span v-text="comment.created_at.toDateTime()"></span>
                     </td>
                     <td>
-                        <a href="#0" @click="delete_comment(comment)"><i class="uk-icon-trash-o"></i></a>
+                        <a href="#0" v-on="click: delete_comment(comment)"><i class="uk-icon-trash-o"></i></a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div :component="pagination" v-with="page"></div>
+        <div v-component="pagination" v-with="page"></div>
     </div>
 {% endblock %}
