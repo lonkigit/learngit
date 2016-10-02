@@ -66,7 +66,7 @@
     </div>
 
     <div id="vm" class="uk-width-2-3">
-        <form @submit="submit" class="uk-form uk-form-stacked">
+        <form v-on="submit: submit" class="uk-form uk-form-stacked">
             <div class="uk-alert uk-alert-danger uk-hidden"></div>
             <div class="uk-form-row">
                 <label class="uk-form-label">标题：</label>
