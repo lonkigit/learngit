@@ -160,7 +160,7 @@ def manage_comments(*,page='1'):
 @get('/manage/blogs')
 def manage_blogs(*,page='1'):
     return {
-        '__template__' : 'manage_comments.html',
+        '__template__' : 'manage_blogs.html',
         'page_index' : get_page_index(page)
     }
 
