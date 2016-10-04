@@ -213,6 +213,14 @@ async def api_delete_comments(id,request):
     await comment.remove()
     return dict(id=id)
 
+#用户管理
+@get('/manage/users')
+def manage_users(*,page='1'):
+    return {
+        '__template__' : 'manage_users.html',
+        'page_index' : get_page_index(page)
+    }
+
 #用户注册
 @post('/api/users')
 async def api_register_user(*,email,name,passwd):
@@ -274,6 +282,20 @@ async def api_blogs(*,page='1'):
         return dict(page=p,blogs=())
     blogs = await Blog.findAll(orderBy='created_at desc',limit=(p.offset,p.limit))
     return dict(page=p,blogs=blogs)
+
+#用户列表
+@get('/api/users')
+async def api_users(*,page='1'):
+    page_index = get_page_index(page)
+    num = await User.findNumber('count(id)')
+    p = Page(num,page_index)
+    if num == 0:
+        return dict(page=p,users=())
+    users = await User.findAll(orderBy='created_at desc',limit=(p.offset,p.limit))
+    for user in users:
+        user.passwd = '******'
+    return dict(page=p,users=users)
+
 
 #获取日志 --修改日志页面用
 @get('/api/blogs/{id}')
