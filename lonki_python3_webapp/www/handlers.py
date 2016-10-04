@@ -83,19 +83,23 @@ def text2html(text):
     lines = map(lambda s: '<p>%s</p>' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'),filter(lambda s: s.strip() != '', text.split('\n')))
     return ''.join(lines)
 
+#首页
 @get('/')
-def index(request):
-    summary = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    blogs = [
-        Blog(id='1',name='Tes Blog',summary=summary,created_at=time.time()-120),
-        Blog(id='2', name='Something New', summary=summary, created_at=time.time() - 3600),
-        Blog(id='3', name='Learn Swift', summary=summary, created_at=time.time() - 7200)
-    ]
+async def index(*,page='1'):
+    page_index = get_page_index(page)
+    num = await Blog.findNumber('count(id)')
+    page = Page(num,page_index)
+    if num == 0:
+        blogs = []
+    else:
+        blogs = await Blog.findAll(orderBy='created_at desc',limit=(page.offset,page.limit))
     return {
         '__template__':'blogs.html',
+        'page':page,
         'blogs':blogs
     }
 
+#获取日志详情
 @get('/blog/{id}')
 async def get_blog(id):
     blog = await Blog.find(id)
@@ -111,6 +115,7 @@ async def get_blog(id):
         'comments': comments
     }
 
+#创建日志评论
 @post('/api/blogs/{id}/comments')
 async def api_create_comment(id,request,*,content):
     user = request.__user__
@@ -125,18 +130,21 @@ async def api_create_comment(id,request,*,content):
     await comment.save()
     return comment
 
+#注册
 @get('/register')
 def register():
     return {
         '__template__' : 'register.html'
     }
 
+#登录
 @get('/signin')
 def signin():
     return {
         '__template__' : 'signin.html'
     }
 
+#退出
 @get('/signout')
 def signout(request):
     referer = request.headers.get('Referer')
@@ -145,11 +153,12 @@ def signout(request):
     logging.info('user signed out.')
     return r
 
-
+#管理员页面
 @get('/manage/')
 def manage():
     return 'redirect:/manage/comments'
 
+#评论管理
 @get('/manage/comments')
 def manage_comments(*,page='1'):
     return {
@@ -157,6 +166,7 @@ def manage_comments(*,page='1'):
         'page_index': get_page_index(page)
     }
 
+#日志管理
 @get('/manage/blogs')
 def manage_blogs(*,page='1'):
     return {
@@ -164,6 +174,7 @@ def manage_blogs(*,page='1'):
         'page_index' : get_page_index(page)
     }
 
+#创建日志
 @get('/manage/blogs/create')
 def manage_create_blog():
     return {
@@ -172,7 +183,16 @@ def manage_create_blog():
         'action' : '/api/blogs'
     }
 
+#修改日志
+@get('/manage/blogs/edit')
+def manage_edit_blog(*,id):
+    return {
+        '__template__':'manage_blog_edit.html',
+        'id' : id,
+        'action':'/api/blogs/%s' % id
+    }
 
+#评论列表
 @get('/api/comments')
 async def api_comments(*,page='1'):
     page_index = get_page_index(page)
@@ -183,6 +203,7 @@ async def api_comments(*,page='1'):
     comments = await Comment.findAll(orderBy='created_at desc',limit=(p.offset,p.limit))
     return dict(page=p,comments=comments)
 
+#删除评论
 @post('/api/comments/{id}/delete')
 async def api_delete_comments(id,request):
     check_admin(request)
@@ -192,6 +213,7 @@ async def api_delete_comments(id,request):
     await comment.remove()
     return dict(id=id)
 
+#用户注册
 @post('/api/users')
 async def api_register_user(*,email,name,passwd):
     if not name or not name.strip():
@@ -215,6 +237,7 @@ async def api_register_user(*,email,name,passwd):
     r.body = json.dumps(user,ensure_ascii=False).encode('utf-8')
     return r
 
+#用户权限验证
 @post('/api/authenticate')
 async def authenticate(*,email,passwd):
     if not email:
@@ -241,6 +264,7 @@ async def authenticate(*,email,passwd):
     r.body = json.dumps(user, ensure_ascii=False).encode('utf-8')
     return r
 
+#日志列表
 @get('/api/blogs')
 async def api_blogs(*,page='1'):
     page_index = get_page_index(page)
@@ -251,11 +275,13 @@ async def api_blogs(*,page='1'):
     blogs = await Blog.findAll(orderBy='created_at desc',limit=(p.offset,p.limit))
     return dict(page=p,blogs=blogs)
 
+#获取日志 --修改日志页面用
 @get('/api/blogs/{id}')
 async def api_get_blog(*,id):
     blog = await Blog.find(id)
     return blog
 
+#创建日志
 @post('/api/blogs')
 async def api_create_blog(request,*,name,summary,content):
     check_admin(request)
@@ -270,3 +296,30 @@ async def api_create_blog(request,*,name,summary,content):
     await blog.save()
     return blog
 
+#修改日志
+@post('/api/blogs/{id}')
+async def api_update_blog(id,request,*,name,summary,content):
+    check_admin(request)
+    blog = await  Blog.find(id)
+    if not name or not name.strip():
+        raise APIValueError('name','name cannot be empty.')
+    if not summary or not summary.strip():
+        raise APIValueError('summary','summary cannot by empty.')
+    if not content or not content.strip():
+        raise APIValueError('content','content cannot by empty.')
+
+    blog.name = name.strip()
+    blog.summary = summary.strip()
+    blog.content = content.strip()
+    await blog.update()
+    return blog
+
+#删除日志
+@post('/api/blogs/{id}/delete')
+async def api_delete_blog(id,request):
+    check_admin(request)
+    blog = await  Blog.find(id)
+    if blog is None:
+        raise APIResourceNotFoundError('Blog')
+    await blog.remove()
+    return dict(id=id)
