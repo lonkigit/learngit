@@ -172,6 +172,13 @@ def manage_create_blog():
         'action' : '/api/blogs'
     }
 
+@get('/manage/blogs/edit')
+def manage_edit_blog(*,id):
+    return {
+        '__template__':'manage_blog_edit.html',
+        'id' : id,
+        'action':'/api/blogs/%s' % id
+    }
 
 @get('/api/comments')
 async def api_comments(*,page='1'):
@@ -270,3 +277,28 @@ async def api_create_blog(request,*,name,summary,content):
     await blog.save()
     return blog
 
+@post('/api/blogs/{id}')
+async def api_update_blog(id,request,*,name,summary,content):
+    check_admin(request)
+    blog = await  Blog.find(id)
+    if not name or not name.strip():
+        raise APIValueError('name','name cannot be empty.')
+    if not summary or not summary.strip():
+        raise APIValueError('summary','summary cannot by empty.')
+    if not content or not content.strip():
+        raise APIValueError('content','content cannot by empty.')
+
+    blog.name = name.strip()
+    blog.summary = summary.strip()
+    blog.content = content.strip()
+    await blog.update()
+    return blog
+
+@post('/api/blogs/{id}/delete')
+async def api_delete_blog(id,request):
+    check_admin(request)
+    blog = await  Blog.find(id)
+    if blog is None:
+        raise APIResourceNotFoundError('Blog')
+    await blog.remove()
+    return dict(id=id)
