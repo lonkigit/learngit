@@ -5,6 +5,6 @@ __author__ = 'lonki'
 
 configs = {
     'db' : {
-        'host':'192.168..0.218'
+        'host':'127.0.0.1'
     }
 }
