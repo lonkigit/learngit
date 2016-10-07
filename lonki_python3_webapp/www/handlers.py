@@ -345,3 +345,10 @@ async def api_delete_blog(id,request):
         raise APIResourceNotFoundError('Blog')
     await blog.remove()
     return dict(id=id)
+
+#管理员页面
+@get('/hostmap/')
+def manage():
+    return {
+        '__template__' : 'hostmap.html'
+    }
