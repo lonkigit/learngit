@@ -11,11 +11,12 @@ from aiohttp import web
 
 from coroweb import get,post
 
-from models import User,Comment,Blog,next_id
+from models import User,Comment,Blog,Order,next_id
 
 from apis import APIValueError, APIResourceNotFoundError,APIError,APIPermissionError,Page
 
 from config import configs
+
 
 import markdown2
 
@@ -346,9 +347,21 @@ async def api_delete_blog(id,request):
     await blog.remove()
     return dict(id=id)
 
-#管理员页面
+#热力图页面
 @get('/hostmap/')
-def manage():
+def hostmap(request):
+    check_admin(request)
     return {
         '__template__' : 'hostmap.html'
     }
+
+
+#用户列表
+@get('/hostmap/orders')
+async def hostmap_orders(request):
+    orders = await Order.findAll()
+    result = []
+    for order in orders:
+        str1 = '{"lng":' + str(order.longitude) + ', "lat":' + str(order.latitude) + '}'
+        result.append(str1)
+    return result

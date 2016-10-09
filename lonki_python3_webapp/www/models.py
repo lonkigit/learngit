@@ -51,3 +51,11 @@ class Comment(Model):
     user_image = StringField(ddl='varchar(500)')
     content =  TextField()
     created_at = FloatField(default=time.time)
+
+#order model
+class Order(Model):
+    __table__ = 'ts_wholesale_order'
+
+    id = StringField(primary_key=True,default=next_id,ddl='varchar(50)')
+    longitude = StringField()
+    latitude = StringField()
