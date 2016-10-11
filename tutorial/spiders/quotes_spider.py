@@ -13,8 +13,8 @@ class QuotesSpider(scrapy.Spider):
     #         yield scrapy.Request(url=url,callback=self.parse)
 
     start_urls = [
-        'http://quotes.toscrape.com/page/3/',
-        'http://quotes.toscrape.com/page/4/',
+        'http://quotes.toscrape.com/page/1/',
+        'http://quotes.toscrape.com/page/2/',
     ]
 
     def parse(self, response):
@@ -82,7 +82,7 @@ class AuthorSpider(scrapy.Spider):
 
     def parse(self, response):
         #follow links to author pages
-        for href in response.css('.author a::attr(href)').extract():
+        for href in response.css('span a[href*=author]::attr(href)').extract():
             yield scrapy.Request(response.urljoin(href),callback=self.parse_author)
 
 
@@ -102,3 +102,42 @@ class AuthorSpider(scrapy.Spider):
             'birthdate' : extract_with_css('.author-born-date::text'),
             'bio' : extract_with_css('.author-description::text')
         }
+
+class QuotesSpider4(scrapy.Spider):
+    name = 'quotes4'
+
+    def start_requests(self):
+        url = 'http://quotes.toscrape.com/'
+        tag = getattr(self,'tag',None)
+        if tag is not None:
+            url = url + 'tag/' + tag
+        yield scrapy.Request(url,self.parse)
+
+    def parse(self, response):
+        for quote in response.css('div.quote'):
+            yield {
+                'text': quote.css("span.text::text").extract_first(),
+                'author': quote.css("small.author::text").extract_first(),
+            }
+
+        next_page = response.css('li.next a::attr(href)').extract_first()
+        if next_page is not None:
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+
+class ToScrapeSpiderXPath(scrapy.Spider):
+    name = 'toscrape-xpath'
+
+    start_urls = ['http://quotes.toscrape.com/']
+
+    def parse(self, response):
+        for quote in response.xpath('//div[@class="quote"]'):
+            yield {
+                'text' : quote.xpath('./span[@class="text"]/text()').extract_first(),
+                'author': quote.xpath('.//small[@class="author"]/text()').extract_first(),
+                'tags': quote.xpath('.//div[@class="tags"]/a[@class="tag"]/text()').extract(),
+            }
+
+        next_page = response.xpath('//li[@class=next]/a/@href').extract_first()
+        if next_page is not None:
+            yield scrapy.Request(response.urljoin(next_page))
