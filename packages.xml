@@ -4666,7 +4666,7 @@
         <entry key="MarkovNetwork" value="" />
         <entry key="MarkovPy" value="" />
         <entry key="MarkovText" value="" />
-        <entry key="MarkupSafe" value="" />
+        <entry key="MarkupSafe" value="0.23" />
         <entry key="Markups" value="" />
         <entry key="Marmir" value="" />
         <entry key="Marnadi" value="" />
@@ -5782,7 +5782,7 @@
         <entry key="Pikabu_telegram_bot" value="" />
         <entry key="Pikzie" value="" />
         <entry key="Pil-Lite" value="" />
-        <entry key="Pillow" value="" />
+        <entry key="Pillow" value="3.4.1" />
         <entry key="Pillow-PIL" value="" />
         <entry key="Pillow-SIMD" value="" />
         <entry key="Pilot-Lib" value="" />
@@ -10939,7 +10939,7 @@
         <entry key="aioh2" value="" />
         <entry key="aiohdfs" value="" />
         <entry key="aiohipchat" value="" />
-        <entry key="aiohttp" value="" />
+        <entry key="aiohttp" value="1.0.5" />
         <entry key="aiohttp-apiset" value="" />
         <entry key="aiohttp-babel" value="" />
         <entry key="aiohttp-devtools" value="" />
@@ -10991,7 +10991,7 @@
         <entry key="aiomock" value="" />
         <entry key="aiompd" value="" />
         <entry key="aiomultiprocessing" value="" />
-        <entry key="aiomysql" value="" />
+        <entry key="aiomysql" value="0.0.9" />
         <entry key="aionotify" value="" />
         <entry key="aionsq" value="" />
         <entry key="aioodbc" value="" />
@@ -50079,7 +50079,7 @@
         <entry key="markdown-to-json" value="" />
         <entry key="markdown-tweetable" value="" />
         <entry key="markdown-viewer" value="" />
-        <entry key="markdown2" value="" />
+        <entry key="markdown2" value="1.0.1.11" />
         <entry key="markdown2Mathjax" value="" />
         <entry key="markdown2latex" value="" />
         <entry key="markdown2social" value="" />
@@ -59891,7 +59891,7 @@
         <entry key="pioneer" value="" />
         <entry key="pioneeravclient" value="" />
         <entry key="pior" value="" />
-        <entry key="pip" value="" />
+        <entry key="pip" value="8.1.2" />
         <entry key="pip-Win" value="" />
         <entry key="pip-accel" value="" />
         <entry key="pip-autoremove" value="" />
@@ -75515,7 +75515,7 @@
         <entry key="setupreader" value="" />
         <entry key="setuptize_me" value="" />
         <entry key="setuptool" value="" />
-        <entry key="setuptools" value="" />
+        <entry key="setuptools" value="28.3.0" />
         <entry key="setuptools-bower" value="" />
         <entry key="setuptools-ci" value="" />
         <entry key="setuptools-clonedigger" value="" />
