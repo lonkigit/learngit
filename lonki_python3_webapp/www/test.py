@@ -1,7 +1,8 @@
-import orm,sys
+import sys
 import asyncio
 
-from models import User,Blog,Comment
+from .models import User,Blog,Comment
+from .orm import create_pool
 
 
 # async def test():
@@ -17,7 +18,7 @@ from models import User,Blog,Comment
 
 @asyncio.coroutine
 def test(loop):
-    yield from orm.create_pool(loop=loop, host='localhost', port=3306, user='root', password='zhujie8721*', db='project')
+    yield from create_pool(loop=loop, host='localhost', port=3306, user='root', password='zhujie8721*', db='project')
     u = User(name='lonki', email='zhujieworkroom@126.com', passwd='lonki8721@', image='www.baidu.com')
     yield from u.save()
 

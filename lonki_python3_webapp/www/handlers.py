@@ -9,13 +9,13 @@ import re,time,json,logging,hashlib,base64,asyncio
 
 from aiohttp import web
 
-from coroweb import get,post
+from .coroweb import get,post
 
-from models import User,Comment,Blog,Order,next_id
+from .models import User,Comment,Blog,Order,next_id
 
-from apis import APIValueError, APIResourceNotFoundError,APIError,APIPermissionError,Page
+from .apis import APIValueError, APIResourceNotFoundError,APIError,APIPermissionError,Page
 
-from config import configs
+from .config import configs
 
 
 import markdown2

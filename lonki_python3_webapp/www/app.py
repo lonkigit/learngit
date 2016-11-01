@@ -15,11 +15,11 @@ from datetime import datetime
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 
-import orm
-from coroweb import add_routes, add_static
-from handlers import COOKIE_NAME,cookie2user
+from .orm import create_pool
+from .coroweb import add_routes, add_static
+from .handlers import COOKIE_NAME,cookie2user
 
-from config import configs
+from .config import configs
 
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
@@ -132,7 +132,7 @@ def datetime_filter(t):
 
 async def init(loop):
     # await orm.create_pool(loop=loop, host='localhost', port=3306, user='root', password='zhujie8721*', db='project')
-    await orm.create_pool(loop=loop,**configs.db)
+    await create_pool(loop=loop,**configs.db)
     app = web.Application(loop=loop, middlewares=[
         logger_factory, auth_factory, response_factory
     ])
